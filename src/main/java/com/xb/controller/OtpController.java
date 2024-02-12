@@ -2,7 +2,9 @@ package com.xb.controller;
 
 import com.xb.dto.GetRegisterRequestDTO;
 import com.xb.dto.OtpResponseDto;
+import com.xb.dto.OtpVerificationResponseDto;
 import com.xb.service.OtpService;
+import com.xb.service.OtpVerificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,10 @@ public class OtpController {
         this.otpService = otpService;
     }
 
+    @Autowired
+    private OtpVerificationService otpVerificationService;
+
+
     @PostMapping("/register-otp")
     public ResponseEntity<OtpResponseDto> registerForOtp(@RequestBody GetRegisterRequestDTO requestDTO) {
         String generatedOtp = otpService.registerForOtp(requestDTO.getMobileNo());
@@ -24,8 +30,9 @@ public class OtpController {
         responseDTO.setOtp(generatedOtp);
         return ResponseEntity.ok(responseDTO);
     }
-   // http://localhost:7877/api/register-otp
-  //  payload={mobileNo:""} both get and register
+
+    // http://localhost:7877/api/register-otp
+    //  payload={mobileNo:""} both get and register
 //http://localhost:7877 /api/get-otp?mobileNumber=9139773752
     @GetMapping("/get-otp")
     public ResponseEntity<OtpResponseDto> getOtp(@RequestParam String mobileNumber) {
@@ -37,6 +44,20 @@ public class OtpController {
         responseDTO.setOtp(otp);
         return ResponseEntity.ok(responseDTO);
     }
-}
+//http://localhost:7877/api/verify-otp?otp=248923
+    @PostMapping("/verify-otp")
+
+    public ResponseEntity<OtpVerificationResponseDto> verifyOtp(@RequestParam String otp, @RequestParam(required = false) String mobileNumber
+    ) {
+        OtpVerificationResponseDto responseDto = otpVerificationService.verifyOtp(otp, mobileNumber);
+
+        if (responseDto.isFlag()) {
+            return ResponseEntity.ok(responseDto);
+        } else {
+            return ResponseEntity.badRequest().body(responseDto);
+        }
+    }}
+
+
 
 

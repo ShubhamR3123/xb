@@ -38,4 +38,9 @@ public class OtpServiceImpl implements OtpService {
         }
         return otp;
     }
+
+    @Override
+    public String getOtpForMobileNumber(String mobileNumber) {
+        return registeredUsers.get(mobileNumber);
+    }
 }

@@ -9,4 +9,5 @@ public interface OtpService {
 
     String getOtp(String mobileNumber);
 
+    String getOtpForMobileNumber(String mobileNumber);
 }
